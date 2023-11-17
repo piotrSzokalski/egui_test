@@ -7,6 +7,8 @@ pub struct TemplateApp {
 
     #[serde(skip)] // This how you opt-out of serialization of a field
     value: f32,
+
+    check_box_value: bool,
 }
 
 impl Default for TemplateApp {
@@ -15,6 +17,7 @@ impl Default for TemplateApp {
             // Example stuff:
             label: "Hello World!".to_owned(),
             value: 2.7,
+            check_box_value: false,
         }
     }
 }
@@ -76,9 +79,24 @@ impl eframe::App for TemplateApp {
             ui.add(egui::Slider::new(&mut self.value, 0.0..=10.0).text("value"));
             if ui.button("Increment").clicked() {
                 self.value += 1.0;
+                self.check_box_value = !self.check_box_value;
             }
 
             ui.separator();
+
+            ui.add(egui::widgets::Checkbox::new(
+                &mut self.check_box_value,
+                "Checked",
+            ));
+
+            if self.check_box_value {
+                ui.label("Chrząszcz brzmi  w czćienie i  żźąńć");
+                egui::Area::new("my_area")
+                    
+                    .show(ctx, |ui| {
+                        ui.label("Floating text!");
+                    });
+            }
 
             ui.add(egui::github_link_file!(
                 "https://github.com/emilk/eframe_template/blob/master/",
